@@ -14,7 +14,7 @@ public class GoogleAnalyticsService {
     String measurementId = "G-9GXQQXJK58";
     String apiSecret = "C5yreDDyQZejewJPjaPl9Q";
 
-    public void sendEvent(String eventName, String category, String action, String label, int value) {
+    public void sendEvent(String eventName, String category, String action, String label, String value) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://www.google-analytics.com/mp/collect?measurement_id=" + measurementId +
@@ -28,7 +28,7 @@ public class GoogleAnalyticsService {
         restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
     }
 
-    private String buildEventJson(String eventName, String category, String action, String label, int value) {
+    private String buildEventJson(String eventName, String category, String action, String label, String value) {
         StringBuilder eventJson = new StringBuilder();
         eventJson.append("{");
         eventJson.append("\"client_id\": \"" + UUID.randomUUID() + "\",");
@@ -39,7 +39,7 @@ public class GoogleAnalyticsService {
         eventJson.append("\"category\": \"" + category + "\",");
         eventJson.append("\"action\": \"" + action + "\",");
         eventJson.append("\"label\": \"" + label + "\",");
-        eventJson.append("\"value\": " + value);
+        eventJson.append("\"value\": \"" + value + "\"");
         eventJson.append("}");
         eventJson.append("}");
         eventJson.append("]");

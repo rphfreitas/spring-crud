@@ -26,7 +26,7 @@ public class CourseController {
     @GetMapping
     public @ResponseBody List<Course> listar() {
 
-        googleAnalyticsService.sendEvent("nome_evento", "Teste2", "estou testando", "servico de teste", 1);
+        googleAnalyticsService.sendEvent("login_portal", "Teste2", null, "servico de teste", "testando");
         return courseRepository.findAll();
     }
 
