@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -21,12 +20,13 @@ public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
 
-    @Autowired private GoogleAnalyticsService googleAnalyticsService;
+    @Autowired
+    private GoogleAnalyticsService googleAnalyticsService;
 
     @GetMapping
     public @ResponseBody List<Course> listar() {
 
-        googleAnalyticsService.sendEvent("nome_evento","Teste2", "estou testando", "servico de teste", 1);
+        googleAnalyticsService.sendEvent("nome_evento", "Teste2", "estou testando", "servico de teste", 1);
         return courseRepository.findAll();
     }
 

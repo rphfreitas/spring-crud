@@ -3,7 +3,6 @@ package com.courses.service;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,13 +11,10 @@ import java.util.UUID;
 @Service
 public class GoogleAnalyticsService {
 
+    String measurementId = "G-9GXQQXJK58";
+    String apiSecret = "C5yreDDyQZejewJPjaPl9Q";
 
-    String clientId = UUID.randomUUID().toString();
-
-    private final String measurementId = "G-9GXQQXJK58"; // Substitua pelo seu Measurement ID
-    private final String apiSecret = "C5yreDDyQZejewJPjaPl9Q"; // Substitua pelo seu API Secret
-
-    public void sendEvent(String eventName,String category, String action, String label, int value) {
+    public void sendEvent(String eventName, String category, String action, String label, int value) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://www.google-analytics.com/mp/collect?measurement_id=" + measurementId +
@@ -27,9 +23,15 @@ public class GoogleAnalyticsService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
+        HttpEntity<String> entity = new HttpEntity<>(buildEventJson(eventName, category, action, label, value), headers);
+
+        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+    }
+
+    private String buildEventJson(String eventName, String category, String action, String label, int value) {
         StringBuilder eventJson = new StringBuilder();
         eventJson.append("{");
-        eventJson.append("\"client_id\": \" " + clientId + "\",");
+        eventJson.append("\"client_id\": \"" + UUID.randomUUID() + "\",");
         eventJson.append("\"events\": [");
         eventJson.append("{");
         eventJson.append("\"name\": \"" + eventName + "\",");
@@ -43,8 +45,6 @@ public class GoogleAnalyticsService {
         eventJson.append("]");
         eventJson.append("}");
 
-        HttpEntity<String> entity = new HttpEntity<>(eventJson.toString(), headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        return eventJson.toString();
     }
 }
