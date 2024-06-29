@@ -2,6 +2,7 @@ package com.courses.controller;
 
 import com.courses.model.Course;
 import com.courses.repository.CourseRepository;
+import com.courses.service.GoogleAnalyticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,12 @@ public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired private GoogleAnalyticsService googleAnalyticsService;
+
     @GetMapping
     public @ResponseBody List<Course> listar() {
+
+        googleAnalyticsService.sendEvent("nome_evento","Teste2", "estou testando", "servico de teste", 1);
         return courseRepository.findAll();
     }
 
